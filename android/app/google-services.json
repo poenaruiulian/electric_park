@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "448723238799",
+    "project_id": "electric-park",
+    "storage_bucket": "electric-park.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448723238799:android:fd2e9d97b87a5680b355fa",
+        "android_client_info": {
+          "package_name": "com.example.electric_park"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448723238799-uqm0vrqr5b6oqv0pnd4dlccesln7r6n0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuzJuYT8Ps0RGZoI6P_AU9VQ3aL1xUMLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448723238799-uqm0vrqr5b6oqv0pnd4dlccesln7r6n0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
