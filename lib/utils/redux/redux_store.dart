@@ -5,7 +5,6 @@ class AppState {
 
   AppState({this.user_position});
 }
-
 class ChangePosition {
   final Position? user_position;
 
