@@ -1,6 +1,9 @@
+import 'package:electric_park/utils/utils.dart';
 import 'package:flutter/material.dart';
 import "package:electric_park/screens/screens.dart";
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -8,24 +11,28 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final store = Store(appReducer, initialState: AppState());
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      title: 'Electric park',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MainPage(),
-    );
+    return StoreProvider(
+        store: store,
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          title: 'Electric park',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const MainPage(),
+        ));
   }
 }
