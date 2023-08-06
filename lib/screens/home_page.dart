@@ -1,3 +1,4 @@
+import 'package:electric_park/constants/constants.dart';
 import 'package:electric_park/widgets/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,8 +7,12 @@ import 'package:electric_park/utils/utils.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lottie/lottie.dart' as lottie;
 import 'package:redux/redux.dart';
 import 'package:http/http.dart' as http;
+
+// 45,76  21,22 Iulius Town
+// 45.75, 21.22 CobaltSign
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   BitmapDescriptor userIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor openIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor closedIcon = BitmapDescriptor.defaultMarker;
+
+  bool cameraMoved = false;
 
   List<Marker> markers = [];
   late GoogleMapController mapController;
@@ -86,12 +93,16 @@ class _HomePageState extends State<HomePage> {
       });
     }, builder: (context, Store<AppState> store) {
       return Scaffold(
+        backgroundColor: KColors.quatro,
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child:
-              store.state.user_position == null || store.state.chargers == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : GoogleMap(
+          child: store.state.user_position == null ||
+                  store.state.chargers == null
+              ? Center(
+                  child: lottie.Lottie.asset('assets/lottie/loading2.json'))
+              : Stack(
+                  children: [
+                    GoogleMap(
                       onMapCreated: (GoogleMapController controller) {
                         mapController = controller;
                         mapController.setMapStyle(_mapStyle);
@@ -125,7 +136,122 @@ class _HomePageState extends State<HomePage> {
                           zoom: 14.0,
                           bearing: 0,
                           tilt: 0),
+                      onCameraMove: (CameraPosition position) {
+                        if ((position.target.latitude * 100).toInt() !=
+                            (store.state.user_position!.latitude * 100)
+                                .toInt()) {
+                          if ((position.target.longitude * 100).toInt() !=
+                              (store.state.user_position!.longitude * 100)
+                                  .toInt()) {
+                            setState(() {
+                              cameraMoved = true;
+                            });
+                          }
+                        }
+                      },
                     ),
+                    SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: KColors.quint,
+                                  borderRadius: BorderRadius.circular(10)),
+                              height: 70,
+                              width: MediaQuery.of(context).size.width - 10,
+                              child: Center(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 10),
+                                    const Text("Nearest : ",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: KColors.primary)),
+                                    Text(
+                                        (store.state.chargers![0].addressInfo
+                                                    .Title.length >
+                                                16
+                                            ? store.state.chargers![0]
+                                                .addressInfo.Title
+                                                .replaceRange(15, null, "...")
+                                            : store.state.chargers![0]
+                                                .addressInfo.Title),
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: KColors.background)),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                        (store.state.chargers![0].addressInfo
+                                                    .Distance! *
+                                                10)
+                                            .toStringAsFixed(1),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: KColors.tertiary)),
+                                    const Text("km",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: KColors.tertiary)),
+                                    IconButton(
+                                        iconSize: 40,
+                                        color: KColors.primary,
+                                        onPressed: () {
+                                          mapController.animateCamera(
+                                              CameraUpdate.newLatLngZoom(
+                                                  LatLng(
+                                                      store.state.chargers![0]
+                                                          .addressInfo.Latitude,
+                                                      store
+                                                          .state
+                                                          .chargers![0]
+                                                          .addressInfo
+                                                          .Longitude),
+                                                  14));
+                                          onPressStation(context,
+                                              store.state.chargers![0]);
+                                        },
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_right))
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              child: cameraMoved
+                                  ? ElevatedButton(
+                                      onPressed: () {
+                                        mapController.animateCamera(
+                                            CameraUpdate.newLatLngZoom(
+                                                LatLng(
+                                                    store.state.user_position!
+                                                        .latitude,
+                                                    store.state.user_position!
+                                                        .longitude),
+                                                14));
+                                        setState(() {
+                                          cameraMoved = false;
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: KColors.tertiary),
+                                      child: const Text("Recenter",
+                                          style: TextStyle(
+                                              color: KColors.background)))
+                                  : const Text(""),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       );
     });

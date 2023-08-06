@@ -19,9 +19,10 @@ class _BottomTabState extends State<BottomTab> {
     return Scaffold(
         body: screens[_index],
         bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [KColors.quatro, KColors.secondary])),
+            decoration: const BoxDecoration(color: KColors.quatro
+                // gradient: LinearGradient(
+                //     colors: [KColors.quatro, KColors.secondary])
+                ),
             child: BottomAppBar(
                 elevation: 0,
                 color: Colors.transparent,

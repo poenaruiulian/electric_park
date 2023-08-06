@@ -115,8 +115,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 )),
             const SizedBox(height: 60),
             ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: KColors.secondary),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: KColors.quatro),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     register(
