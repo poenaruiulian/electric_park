@@ -44,6 +44,7 @@ dependencies:
   google_maps_flutter: ^2.4.0
   google_maps_flutter_web: ^0.5.3
   http: ^1.1.0
+  lottie: any
 
 
 dev_dependencies:
@@ -74,6 +75,9 @@ flutter:
     - assets/icons/user.png
     - assets/icons/open.png
     - assets/icons/closed.png
+    - assets/lottie/loading1.json
+    - assets/lottie/loading2.json
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
