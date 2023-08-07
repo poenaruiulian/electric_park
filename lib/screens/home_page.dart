@@ -49,6 +49,12 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  void updateUserState(var data) {
+    setState(() {
+      userData = data;
+    });
+  }
+
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
             const ImageConfiguration(), "assets/icons/user.png")
@@ -97,6 +103,8 @@ class _HomePageState extends State<HomePage> {
           .then((List<Data> resp) {
         store.dispatch(ChangeChargerPoints(resp));
       });
+      store.dispatch(ChangeStationIds(userData["charging_at"]["charger_id"],
+          userData["charging_at"]["connection_id"]));
     }, builder: (context, Store<AppState> store) {
       return Scaffold(
         backgroundColor: KColors.quatro,
@@ -164,9 +172,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: userData["charging_at"]
-                                              ["connection_id"] ==
-                                          ""
+                                  color: store.state.connectionId == ""
                                       ? KColors.quint
                                       : KColors.charge,
                                   borderRadius: BorderRadius.circular(10)),
@@ -177,9 +183,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     const SizedBox(width: 10),
                                     Text(
-                                        userData["charging_at"]
-                                                    ["connection_id"] ==
-                                                ""
+                                        store.state.connectionId == ""
                                             ? "Nearest : "
                                             : "Charging at : ",
                                         style: const TextStyle(
@@ -187,38 +191,36 @@ class _HomePageState extends State<HomePage> {
                                             fontWeight: FontWeight.bold,
                                             color: KColors.primary)),
                                     Text(
-                                        userData["charging_at"]["connection_id"] ==
-                                                ""
-                                            ? (store
-                                                        .state
-                                                        .chargers![0]
-                                                        .addressInfo
-                                                        .Title
-                                                        .length >
-                                                    16
+                                        store.state.connectionId == ""
+                                            ? (store.state.chargers![0].addressInfo.Title.length > 16
                                                 ? store.state.chargers![0]
                                                     .addressInfo.Title
                                                     .replaceRange(
                                                         15, null, "...")
                                                 : store.state.chargers![0]
                                                     .addressInfo.Title)
-                                            : store.state.chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == userData["charging_at"]["charger_id"])].addressInfo.Title.length >
+                                            : store
+                                                        .state
+                                                        .chargers![store.state.chargers!
+                                                            .indexWhere((element) =>
+                                                                element.ID.toString() ==
+                                                                store.state
+                                                                    .chargerId)]
+                                                        .addressInfo
+                                                        .Title
+                                                        .length >
                                                     8
                                                 ? store
                                                     .state
-                                                    .chargers![store
-                                                        .state.chargers!
-                                                        .indexWhere((element) => element.ID.toString() == userData["charging_at"]["charger_id"])]
+                                                    .chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == store.state.chargerId)]
                                                     .addressInfo
                                                     .Title
                                                     .replaceRange(8, null, "...")
-                                                : store.state.chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == userData["charging_at"]["charger_id"])].addressInfo.Title,
+                                                : store.state.chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == store.state.chargerId)].addressInfo.Title,
                                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: KColors.background)),
                                     const SizedBox(width: 10),
                                     Text(
-                                        userData["charging_at"]
-                                                    ["connection_id"] ==
-                                                ""
+                                        store.state.connectionId == ""
                                             ? (store.state.chargers![0]
                                                         .addressInfo.Distance! *
                                                     10)
@@ -230,9 +232,8 @@ class _HomePageState extends State<HomePage> {
                                                             .indexWhere((element) =>
                                                                 element.ID
                                                                     .toString() ==
-                                                                userData["charging_at"]
-                                                                    [
-                                                                    "charger_id"])]
+                                                                store.state
+                                                                    .chargerId)]
                                                         .addressInfo
                                                         .Distance! *
                                                     10)
@@ -254,10 +255,12 @@ class _HomePageState extends State<HomePage> {
                                               LatLng(
                                                   store
                                                       .state
-                                                      .chargers![store.state.chargers!.indexWhere((element) =>
-                                                          element.ID.toString() ==
-                                                          userData["charging_at"]
-                                                              ["charger_id"])]
+                                                      .chargers![store
+                                                          .state.chargers!
+                                                          .indexWhere((element) =>
+                                                              element.ID.toString() ==
+                                                              store.state
+                                                                  .chargerId)]
                                                       .addressInfo
                                                       .Latitude,
                                                   store
@@ -265,10 +268,8 @@ class _HomePageState extends State<HomePage> {
                                                       .chargers![store
                                                           .state.chargers!
                                                           .indexWhere((element) =>
-                                                              element.ID
-                                                                  .toString() ==
-                                                              userData["charging_at"]
-                                                                  ["charger_id"])]
+                                                              element.ID.toString() ==
+                                                              store.state.chargerId)]
                                                       .addressInfo
                                                       .Longitude),
                                               14));
@@ -278,8 +279,7 @@ class _HomePageState extends State<HomePage> {
                                                   .state.chargers!
                                                   .indexWhere((element) =>
                                                       element.ID.toString() ==
-                                                      userData["charging_at"]
-                                                          ["charger_id"])]);
+                                                      store.state.chargerId)]);
                                         },
                                         icon: const Icon(
                                             Icons.keyboard_arrow_right))

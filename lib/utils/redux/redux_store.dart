@@ -5,7 +5,11 @@ class AppState {
   Position? user_position;
   List<Data>? chargers;
 
-  AppState({this.user_position, this.chargers});
+  String? chargerId;
+  String? connectionId;
+
+  AppState(
+      {this.user_position, this.chargers, this.chargerId, this.connectionId});
 }
 
 class ChangePosition {
@@ -22,4 +26,11 @@ class ChangeChargerPoints {
   List<Data>? get points => chargers;
 
   ChangeChargerPoints(this.chargers);
+}
+
+class ChangeStationIds {
+  String? chargerId;
+  String? connectionId;
+
+  ChangeStationIds(this.chargerId, this.connectionId);
 }
