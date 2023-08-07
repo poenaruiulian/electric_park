@@ -119,6 +119,9 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                 removeConnection(user.email!,
                                     widget.connection.ID.toString());
                                 store.dispatch(ChangeStationIds("", ""));
+                                setState(() {
+                                  occupiedConect -= 1;
+                                });
                               } else {
                                 addConnection(
                                     user.email!,
@@ -127,6 +130,9 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                 store.dispatch(ChangeStationIds(
                                     widget.chargerId.toString(),
                                     widget.connection.ID.toString()));
+                                setState(() {
+                                  occupiedConect += 1;
+                                });
                               }
                             },
                             child: Text(

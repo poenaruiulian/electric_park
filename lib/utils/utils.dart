@@ -5,6 +5,7 @@ export 'firebase/firestore/add_connection.dart';
 export 'firebase/firestore/remove_connection.dart';
 export 'firebase/firestore/occupied_connectors.dart';
 export 'firebase/firestore/get_userdata.dart';
+export 'firebase/firestore/total_occupied_connectors.dart';
 export 'handle_location_permission.dart';
 export 'redux/redux_reduce.dart';
 export 'redux/redux_store.dart';
