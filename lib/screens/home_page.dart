@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   BitmapDescriptor userIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor openIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor closedIcon = BitmapDescriptor.defaultMarker;
-
+  var userData;
   bool cameraMoved = false;
 
   List<Marker> markers = [];
@@ -38,9 +38,15 @@ class _HomePageState extends State<HomePage> {
   initState() {
     super.initState();
     addCustomIcon();
+    getUserData();
     rootBundle.loadString('assets/map_style.json').then((string) {
       _mapStyle = string;
     });
+  }
+
+  void getUserData() async {
+    userData = (await getUser(user.email!))!;
+    setState(() {});
   }
 
   void addCustomIcon() {
@@ -96,7 +102,8 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: KColors.quatro,
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: store.state.user_position == null ||
+          child: userData == null ||
+                  store.state.user_position == null ||
                   store.state.chargers == null
               ? Center(
                   child: lottie.Lottie.asset('assets/lottie/loading2.json'))
@@ -157,7 +164,11 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: KColors.quint,
+                                  color: userData["charging_at"]
+                                              ["connection_id"] ==
+                                          ""
+                                      ? KColors.quint
+                                      : KColors.charge,
                                   borderRadius: BorderRadius.circular(10)),
                               height: 70,
                               width: MediaQuery.of(context).size.width - 10,
@@ -165,30 +176,67 @@ class _HomePageState extends State<HomePage> {
                                 child: Row(
                                   children: [
                                     const SizedBox(width: 10),
-                                    const Text("Nearest : ",
-                                        style: TextStyle(
+                                    Text(
+                                        userData["charging_at"]
+                                                    ["connection_id"] ==
+                                                ""
+                                            ? "Nearest : "
+                                            : "Charging at : ",
+                                        style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                             color: KColors.primary)),
                                     Text(
-                                        (store.state.chargers![0].addressInfo
-                                                    .Title.length >
-                                                16
-                                            ? store.state.chargers![0]
-                                                .addressInfo.Title
-                                                .replaceRange(15, null, "...")
-                                            : store.state.chargers![0]
-                                                .addressInfo.Title),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: KColors.background)),
+                                        userData["charging_at"]["connection_id"] ==
+                                                ""
+                                            ? (store
+                                                        .state
+                                                        .chargers![0]
+                                                        .addressInfo
+                                                        .Title
+                                                        .length >
+                                                    16
+                                                ? store.state.chargers![0]
+                                                    .addressInfo.Title
+                                                    .replaceRange(
+                                                        15, null, "...")
+                                                : store.state.chargers![0]
+                                                    .addressInfo.Title)
+                                            : store.state.chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == userData["charging_at"]["charger_id"])].addressInfo.Title.length >
+                                                    8
+                                                ? store
+                                                    .state
+                                                    .chargers![store
+                                                        .state.chargers!
+                                                        .indexWhere((element) => element.ID.toString() == userData["charging_at"]["charger_id"])]
+                                                    .addressInfo
+                                                    .Title
+                                                    .replaceRange(8, null, "...")
+                                                : store.state.chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == userData["charging_at"]["charger_id"])].addressInfo.Title,
+                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: KColors.background)),
                                     const SizedBox(width: 10),
                                     Text(
-                                        (store.state.chargers![0].addressInfo
-                                                    .Distance! *
-                                                10)
-                                            .toStringAsFixed(1),
+                                        userData["charging_at"]
+                                                    ["connection_id"] ==
+                                                ""
+                                            ? (store.state.chargers![0]
+                                                        .addressInfo.Distance! *
+                                                    10)
+                                                .toStringAsFixed(1)
+                                            : (store
+                                                        .state
+                                                        .chargers![store
+                                                            .state.chargers!
+                                                            .indexWhere((element) =>
+                                                                element.ID
+                                                                    .toString() ==
+                                                                userData["charging_at"]
+                                                                    [
+                                                                    "charger_id"])]
+                                                        .addressInfo
+                                                        .Distance! *
+                                                    10)
+                                                .toStringAsFixed(1),
                                         style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -202,19 +250,36 @@ class _HomePageState extends State<HomePage> {
                                         iconSize: 40,
                                         color: KColors.primary,
                                         onPressed: () {
-                                          mapController.animateCamera(
-                                              CameraUpdate.newLatLngZoom(
-                                                  LatLng(
-                                                      store.state.chargers![0]
-                                                          .addressInfo.Latitude,
-                                                      store
-                                                          .state
-                                                          .chargers![0]
-                                                          .addressInfo
-                                                          .Longitude),
-                                                  14));
-                                          onPressStation(context,
-                                              store.state.chargers![0]);
+                                          mapController.animateCamera(CameraUpdate.newLatLngZoom(
+                                              LatLng(
+                                                  store
+                                                      .state
+                                                      .chargers![store.state.chargers!.indexWhere((element) =>
+                                                          element.ID.toString() ==
+                                                          userData["charging_at"]
+                                                              ["charger_id"])]
+                                                      .addressInfo
+                                                      .Latitude,
+                                                  store
+                                                      .state
+                                                      .chargers![store
+                                                          .state.chargers!
+                                                          .indexWhere((element) =>
+                                                              element.ID
+                                                                  .toString() ==
+                                                              userData["charging_at"]
+                                                                  ["charger_id"])]
+                                                      .addressInfo
+                                                      .Longitude),
+                                              14));
+                                          onPressStation(
+                                              context,
+                                              store.state.chargers![store
+                                                  .state.chargers!
+                                                  .indexWhere((element) =>
+                                                      element.ID.toString() ==
+                                                      userData["charging_at"]
+                                                          ["charger_id"])]);
                                         },
                                         icon: const Icon(
                                             Icons.keyboard_arrow_right))

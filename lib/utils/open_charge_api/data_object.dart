@@ -6,6 +6,7 @@ class Data {
   final int? DataProviderID;
   final int? OperatorID;
   final int? UsageTypeID;
+  final String? UsageCost;
   final AddressInfo addressInfo;
   final List<Connection>? Connections;
 
@@ -17,12 +18,14 @@ class Data {
       required this.DataProviderID,
       required this.OperatorID,
       required this.UsageTypeID,
+      required this.UsageCost,
       required this.addressInfo,
       required this.Connections});
 
   factory Data.fromJson(Map<String, dynamic> parsedJson) {
     return Data(
         ID: parsedJson["ID"] as int?,
+        UsageCost: parsedJson["UsageCost"] as String?,
         IsRecentlyVerified: parsedJson["IsRecentlyVerified"] as bool?,
         DateLastVerified: parsedJson["DateLastVerified"] as String?,
         UUID: parsedJson["UUID"] as String?,
@@ -47,6 +50,7 @@ class AddressInfo {
   final double Longitude;
   final double? Distance;
   final int? DistanceUnit;
+  final String? StateOrProvince;
 
   AddressInfo(
       {required this.ID,
@@ -58,7 +62,8 @@ class AddressInfo {
       required this.Latitude,
       required this.Longitude,
       required this.Distance,
-      required this.DistanceUnit});
+      required this.DistanceUnit,
+      required this.StateOrProvince});
 
   factory AddressInfo.fromJson(Map<String, dynamic> parsedJson) {
     return AddressInfo(
@@ -71,7 +76,8 @@ class AddressInfo {
         Latitude: parsedJson["Latitude"] as double,
         Longitude: parsedJson["Longitude"] as double,
         Distance: parsedJson["Distance"] as double?,
-        DistanceUnit: parsedJson["DistanceUnit"] as int?);
+        DistanceUnit: parsedJson["DistanceUnit"] as int?,
+        StateOrProvince: parsedJson["StateOrProvince"] as String?);
   }
 }
 
