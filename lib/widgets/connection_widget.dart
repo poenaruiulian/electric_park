@@ -111,7 +111,9 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                               backgroundColor: store.state.connectionId ==
                                       widget.connection.ID.toString()
                                   ? KColors.stop
-                                  : KColors.charge,
+                                  : occupiedConect == widget.connection.Quantity
+                                      ? Colors.grey
+                                      : KColors.charge,
                             ),
                             onPressed: () {
                               if (store.state.connectionId ==
@@ -122,7 +124,9 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                 setState(() {
                                   occupiedConect -= 1;
                                 });
-                              } else {
+                              } else if (store.state.chargerId == "" &&
+                                  occupiedConect !=
+                                      widget.connection.Quantity) {
                                 addConnection(
                                     user.email!,
                                     widget.chargerId.toString(),
@@ -133,13 +137,18 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                 setState(() {
                                   occupiedConect += 1;
                                 });
+                              } else {
+                                print("Helllo world here!");
                               }
                             },
                             child: Text(
                                 store.state.connectionId ==
                                         widget.connection.ID.toString()
                                     ? "Stop"
-                                    : "Charge",
+                                    : occupiedConect ==
+                                            widget.connection.Quantity
+                                        ? "Full"
+                                        : "Charge",
                                 style: TextStyle(color: KColors.quatro)),
                           )
                         ],

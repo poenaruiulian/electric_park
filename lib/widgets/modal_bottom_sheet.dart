@@ -6,7 +6,7 @@ void onPressStation(BuildContext context, Data charger) {
   showBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return ConnectorWidget(
+        return ChargerWidget(
           charger: charger,
         );
       });

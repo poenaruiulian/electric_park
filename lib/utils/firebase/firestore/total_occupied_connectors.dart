@@ -6,21 +6,17 @@ Future<int> totalOccupiedConnectors(Data charger) async {
     Future<int> number =
         FirebaseFirestore.instance.collection("occupied_chargers").get().then(
       (querySnapshot) {
-        print("Successfully completed");
-
         List connections = querySnapshot.docs[0].data()["chargers"];
 
         int aux = 0;
 
         for (var connector in charger.Connections!) {
           for (var fireConnector in connections) {
-            if (connector.ID == fireConnector) {
+            if (connector.ID.toString() == fireConnector) {
               aux += 1;
             }
           }
         }
-
-        print(aux);
 
         return aux;
       },

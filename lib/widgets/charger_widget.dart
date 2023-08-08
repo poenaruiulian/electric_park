@@ -2,17 +2,18 @@ import 'package:electric_park/utils/utils.dart';
 import 'package:electric_park/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:electric_park/constants/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class ConnectorWidget extends StatefulWidget {
-  const ConnectorWidget({Key? key, required this.charger});
+class ChargerWidget extends StatefulWidget {
+  const ChargerWidget({Key? key, required this.charger});
 
   final Data charger;
 
   @override
-  State<ConnectorWidget> createState() => _ConnectorWidgetState();
+  State<ChargerWidget> createState() => _ChargerWidgetState();
 }
 
-class _ConnectorWidgetState extends State<ConnectorWidget> {
+class _ChargerWidgetState extends State<ChargerWidget> {
   int totalConnections = 0;
   int occupiedConnections = 0;
 
@@ -32,7 +33,7 @@ class _ConnectorWidgetState extends State<ConnectorWidget> {
   void initState() {
     super.initState();
     getOccupiedConnections();
-    totalConnections;
+    totalConnectors();
 
     print(totalConnections);
     print(occupiedConnections);
@@ -41,7 +42,7 @@ class _ConnectorWidgetState extends State<ConnectorWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * 0.7,
         width: MediaQuery.of(context).size.width - 20,
         decoration: const BoxDecoration(
             color: KColors.tertiary,
@@ -97,20 +98,26 @@ class _ConnectorWidgetState extends State<ConnectorWidget> {
                       ]),
                     ),
                     Text(widget.charger.addressInfo.AddressLine1,
-                        style: const TextStyle(
+                        style: GoogleFonts.notoSans(
+                            textStyle: const TextStyle(
                           fontSize: 16,
-                          color: KColors.secondary,
-                        )),
+                          color: KColors.quatro,
+                          fontWeight: FontWeight.w500,
+                        ))),
                     Text("${widget.charger.addressInfo.Town}",
-                        style: const TextStyle(
+                        style: GoogleFonts.notoSans(
+                            textStyle: const TextStyle(
                           fontSize: 16,
-                          color: KColors.secondary,
-                        )),
+                          color: KColors.quatro,
+                          fontWeight: FontWeight.w500,
+                        ))),
                     Text("${widget.charger.addressInfo.StateOrProvince}",
-                        style: const TextStyle(
+                        style: GoogleFonts.notoSans(
+                            textStyle: const TextStyle(
                           fontSize: 16,
-                          color: KColors.secondary,
-                        )),
+                          color: KColors.quatro,
+                          fontWeight: FontWeight.w500,
+                        ))),
                     const SizedBox(height: 10),
                   ]),
                 ),
@@ -164,9 +171,9 @@ class _ConnectorWidgetState extends State<ConnectorWidget> {
                             ),
                             Text("Usage cost: ${widget.charger.UsageCost}",
                                 style: const TextStyle(
-                                  fontSize: 16,
-                                  color: KColors.secondary,
-                                )),
+                                    fontSize: 16,
+                                    color: KColors.quatro,
+                                    fontWeight: FontWeight.w500)),
                             const SizedBox(height: 10)
                           ])),
                       const SizedBox(height: 20),

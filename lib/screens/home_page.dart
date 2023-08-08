@@ -85,6 +85,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int indexOfNearest(Store<AppState> store) {
+    int nearestOpen = 0;
+    for (var charger in store.state.chargers!) {
+      if (charger.isOpen) {
+        nearestOpen = store.state.chargers!.indexOf(charger);
+        break;
+      }
+    }
+    return nearestOpen;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreBuilder(
@@ -100,9 +111,20 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
       }
       await fetchData(http.Client(), _userPos!.latitude, _userPos!.longitude)
-          .then((List<Data> resp) {
-        store.dispatch(ChangeChargerPoints(resp));
+          .then((List<Data> resp) async {
+        List<Data> aux = resp;
+        for (Data charger in aux) {
+          var occupiedConnections = await totalOccupiedConnectors(charger);
+          var totalConnections = 0;
+          for (Connection connection in charger.Connections!) {
+            totalConnections += connection.Quantity ?? 0;
+          }
+          aux[aux.indexOf(charger)].isOpen =
+              (totalConnections == occupiedConnections) ? false : true;
+        }
+        store.dispatch(ChangeChargerPoints(aux));
       });
+
       store.dispatch(ChangeStationIds(userData["charging_at"]["charger_id"],
           userData["charging_at"]["connection_id"]));
     }, builder: (context, Store<AppState> store) {
@@ -134,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                         });
                         for (Data charger in store.state.chargers!) {
                           markers.add(Marker(
-                              icon: openIcon,
+                              icon: charger.isOpen ? openIcon : closedIcon,
                               onTap: () {
                                 onPressStation(context, charger);
                               },
@@ -176,56 +198,39 @@ class _HomePageState extends State<HomePage> {
                                       ? KColors.quint
                                       : KColors.charge,
                                   borderRadius: BorderRadius.circular(10)),
-                              height: 70,
+                              height: 75,
                               width: MediaQuery.of(context).size.width - 10,
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 10),
-                                    Text(
-                                        store.state.connectionId == ""
-                                            ? "Nearest : "
-                                            : "Charging at : ",
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: KColors.primary)),
-                                    Text(
-                                        store.state.connectionId == ""
-                                            ? (store.state.chargers![0].addressInfo.Title.length > 16
-                                                ? store.state.chargers![0]
-                                                    .addressInfo.Title
-                                                    .replaceRange(
-                                                        15, null, "...")
-                                                : store.state.chargers![0]
-                                                    .addressInfo.Title)
-                                            : store
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(width: 10),
+                                        Text(
+                                            store.state.connectionId == ""
+                                                ? "Nearest : "
+                                                : "Charging at : ",
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: KColors.primary)),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                store.state.connectionId == ""
+                                                    ? store
                                                         .state
-                                                        .chargers![store.state.chargers!
-                                                            .indexWhere((element) =>
-                                                                element.ID.toString() ==
-                                                                store.state
-                                                                    .chargerId)]
+                                                        .chargers![
+                                                            indexOfNearest(
+                                                                store)]
                                                         .addressInfo
                                                         .Title
-                                                        .length >
-                                                    8
-                                                ? store
-                                                    .state
-                                                    .chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == store.state.chargerId)]
-                                                    .addressInfo
-                                                    .Title
-                                                    .replaceRange(8, null, "...")
-                                                : store.state.chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == store.state.chargerId)].addressInfo.Title,
-                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: KColors.background)),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                        store.state.connectionId == ""
-                                            ? (store.state.chargers![0]
-                                                        .addressInfo.Distance! *
-                                                    10)
-                                                .toStringAsFixed(1)
-                                            : (store
+                                                    : store
                                                         .state
                                                         .chargers![store
                                                             .state.chargers!
@@ -235,56 +240,94 @@ class _HomePageState extends State<HomePage> {
                                                                 store.state
                                                                     .chargerId)]
                                                         .addressInfo
-                                                        .Distance! *
-                                                    10)
-                                                .toStringAsFixed(1),
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: KColors.tertiary)),
-                                    const Text("km",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: KColors.tertiary)),
-                                    IconButton(
-                                        iconSize: 40,
-                                        color: KColors.primary,
-                                        onPressed: () {
-                                          mapController.animateCamera(CameraUpdate.newLatLngZoom(
-                                              LatLng(
-                                                  store
-                                                      .state
-                                                      .chargers![store
-                                                          .state.chargers!
-                                                          .indexWhere((element) =>
-                                                              element.ID.toString() ==
-                                                              store.state
-                                                                  .chargerId)]
-                                                      .addressInfo
-                                                      .Latitude,
-                                                  store
-                                                      .state
-                                                      .chargers![store
-                                                          .state.chargers!
-                                                          .indexWhere((element) =>
-                                                              element.ID.toString() ==
-                                                              store.state.chargerId)]
-                                                      .addressInfo
-                                                      .Longitude),
-                                              14));
-                                          onPressStation(
-                                              context,
-                                              store.state.chargers![store
-                                                  .state.chargers!
-                                                  .indexWhere((element) =>
-                                                      element.ID.toString() ==
-                                                      store.state.chargerId)]);
-                                        },
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_right))
-                                  ],
-                                ),
+                                                        .Title,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: KColors.background)),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                                store.state.connectionId == ""
+                                                    ? (store
+                                                                .state
+                                                                .chargers![
+                                                                    indexOfNearest(
+                                                                        store)]
+                                                                .addressInfo
+                                                                .Distance! *
+                                                            10)
+                                                        .toStringAsFixed(1)
+                                                    : (store
+                                                                .state
+                                                                .chargers![store
+                                                                    .state
+                                                                    .chargers!
+                                                                    .indexWhere((element) =>
+                                                                        element.ID.toString() ==
+                                                                        store
+                                                                            .state
+                                                                            .chargerId)]
+                                                                .addressInfo
+                                                                .Distance! *
+                                                            10)
+                                                        .toStringAsFixed(1),
+                                                style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: KColors.tertiary)),
+                                            const Text("km",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: KColors.tertiary)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                      iconSize: 40,
+                                      color: KColors.primary,
+                                      onPressed: () {
+                                        mapController.animateCamera(CameraUpdate.newLatLngZoom(
+                                            LatLng(
+                                                store.state.chargerId != ""
+                                                    ? store
+                                                        .state
+                                                        .chargers![store.state.chargers!.indexWhere((element) =>
+                                                            element.ID.toString() ==
+                                                            store.state
+                                                                .chargerId)]
+                                                        .addressInfo
+                                                        .Latitude
+                                                    : store
+                                                        .state
+                                                        .chargers![indexOfNearest(
+                                                            store)]
+                                                        .addressInfo
+                                                        .Latitude,
+                                                store.state.chargerId != ""
+                                                    ? store
+                                                        .state
+                                                        .chargers![store.state.chargers!.indexWhere((element) => element.ID.toString() == store.state.chargerId)]
+                                                        .addressInfo
+                                                        .Longitude
+                                                    : store.state.chargers![indexOfNearest(store)].addressInfo.Longitude),
+                                            14));
+                                        onPressStation(
+                                            context,
+                                            store.state.chargerId != ""
+                                                ? store.state.chargers![store
+                                                    .state.chargers!
+                                                    .indexWhere((element) =>
+                                                        element.ID.toString() ==
+                                                        store.state.chargerId)]
+                                                : store.state.chargers![
+                                                    indexOfNearest(store)]);
+                                      },
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_right))
+                                ],
                               ),
                             ),
                             const SizedBox(height: 10),

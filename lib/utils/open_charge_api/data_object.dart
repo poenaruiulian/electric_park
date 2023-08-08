@@ -9,6 +9,7 @@ class Data {
   final String? UsageCost;
   final AddressInfo addressInfo;
   final List<Connection>? Connections;
+  bool isOpen;
 
   Data(
       {required this.IsRecentlyVerified,
@@ -20,10 +21,12 @@ class Data {
       required this.UsageTypeID,
       required this.UsageCost,
       required this.addressInfo,
-      required this.Connections});
+      required this.Connections,
+      required this.isOpen});
 
   factory Data.fromJson(Map<String, dynamic> parsedJson) {
     return Data(
+        isOpen: true,
         ID: parsedJson["ID"] as int?,
         UsageCost: parsedJson["UsageCost"] as String?,
         IsRecentlyVerified: parsedJson["IsRecentlyVerified"] as bool?,
