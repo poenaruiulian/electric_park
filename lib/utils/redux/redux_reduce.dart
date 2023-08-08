@@ -6,21 +6,61 @@ AppState appReducer(AppState state, dynamic action) {
         chargers: state.chargers,
         user_position: action.user_position,
         chargerId: state.chargerId,
-        connectionId: state.connectionId);
+        connectionId: state.connectionId,
+        user_email: state.user_email,
+        user_name: state.user_name,
+        mapIsLoading: state.mapIsLoading);
   }
   if (action is ChangeChargerPoints) {
     return AppState(
         user_position: state.user_position,
         chargers: action.chargers,
         chargerId: state.chargerId,
-        connectionId: state.connectionId);
+        connectionId: state.connectionId,
+        user_email: state.user_email,
+        user_name: state.user_name,
+        mapIsLoading: state.mapIsLoading);
   }
   if (action is ChangeStationIds) {
     return AppState(
         user_position: state.user_position,
         chargers: state.chargers,
         chargerId: action.chargerId,
-        connectionId: action.connectionId);
+        connectionId: action.connectionId,
+        user_email: state.user_email,
+        user_name: state.user_name,
+        mapIsLoading: state.mapIsLoading);
+  }
+  if (action is ChangeUserEmail) {
+    return AppState(
+        user_position: state.user_position,
+        chargers: state.chargers,
+        chargerId: state.chargerId,
+        connectionId: state.connectionId,
+        user_email: action.email,
+        user_name: state.user_name,
+        mapIsLoading: state.mapIsLoading);
+  }
+  if (action is ChangeUserName) {
+    return AppState(
+        user_position: state.user_position,
+        chargers: state.chargers,
+        chargerId: state.chargerId,
+        connectionId: state.connectionId,
+        user_email: state.user_email,
+        user_name: action.name,
+        mapIsLoading: state.mapIsLoading);
+  }
+
+  if (action is ModifyMapIsLoading) {
+    return AppState(
+        user_position: state.user_position,
+        chargers: state.chargers,
+        chargerId: state.chargerId,
+        connectionId: state.connectionId,
+        user_email: state.user_email,
+        user_name: state.user_name,
+        mapIsLoading: action.mapIsLoading);
   }
 
   return state;

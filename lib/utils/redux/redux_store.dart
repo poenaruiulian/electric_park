@@ -8,8 +8,19 @@ class AppState {
   String? chargerId;
   String? connectionId;
 
+  String? user_email;
+  String? user_name;
+
+  bool? mapIsLoading;
+
   AppState(
-      {this.user_position, this.chargers, this.chargerId, this.connectionId});
+      {this.user_email,
+      this.user_name,
+      this.user_position,
+      this.chargers,
+      this.chargerId,
+      this.connectionId,
+      this.mapIsLoading});
 }
 
 class ChangePosition {
@@ -33,4 +44,22 @@ class ChangeStationIds {
   String? connectionId;
 
   ChangeStationIds(this.chargerId, this.connectionId);
+}
+
+class ChangeUserEmail {
+  String? email;
+
+  ChangeUserEmail(this.email);
+}
+
+class ChangeUserName {
+  String? name;
+
+  ChangeUserName(this.name);
+}
+
+class ModifyMapIsLoading {
+  bool? mapIsLoading;
+
+  ModifyMapIsLoading(this.mapIsLoading);
 }
