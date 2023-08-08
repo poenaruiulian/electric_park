@@ -7,4 +7,6 @@ class KColors {
   static const quatro = Color(0xFF25274d);
   static const quint = Color(0xFF4477CE);
   static const background = Color(0xFFf5f5f5);
+  static const charge = Color(0xFFCECE5A);
+  static const stop = Color(0xFFEF6262);
 }

@@ -45,6 +45,8 @@ dependencies:
   google_maps_flutter_web: ^0.5.3
   http: ^1.1.0
   lottie: any
+  flutter_svg: ^2.0.7
+  google_fonts: ^5.1.0
 
 
 dev_dependencies:
@@ -77,7 +79,14 @@ flutter:
     - assets/icons/closed.png
     - assets/lottie/loading1.json
     - assets/lottie/loading2.json
-    
+  
+  fonts:
+    - family: Aileron
+      fonts:
+        - asset: fonts/Aileron-Black.otf
+    - family : NotoSans
+      fonts:
+        - asset: fonts/NotoSans-Black.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
