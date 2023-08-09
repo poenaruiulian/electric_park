@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                         position: LatLng(store.state.user_position!.latitude,
                             store.state.user_position!.longitude)));
                   });
-                  for (Data charger in store.state.chargers!) {
+                  for (Charger charger in store.state.chargers!) {
                     markers.add(Marker(
                         icon: charger.isOpen ? openIcon : closedIcon,
                         onTap: () {

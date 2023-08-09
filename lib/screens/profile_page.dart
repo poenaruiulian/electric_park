@@ -1,3 +1,4 @@
+import 'package:electric_park/screens/screens.dart';
 import 'package:electric_park/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,56 +109,72 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: KColors.quint,
-                      ),
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      width: MediaQuery.of(context).size.width * 0.5 - 20,
-                      child: const Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.edit,
-                            size: 30,
-                            color: KColors.background,
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProfileModifyPage(
+                                  type: Profile.Name,
+                                  userId: store.state.user_id,
+                                  icon: "assets/lottie/user_name.json")));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: KColors.quint,
                           ),
-                          Text("Edit name",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: KColors.background))
-                        ],
-                      )),
-                    ),
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.width * 0.5 - 20,
+                          child: const Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 30,
+                                color: KColors.background,
+                              ),
+                              Text("Edit name",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: KColors.background))
+                            ],
+                          )),
+                        )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: KColors.quint,
-                          borderRadius: BorderRadius.circular(10)),
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      width: MediaQuery.of(context).size.width * 0.5 - 20,
-                      child: const Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.mail,
-                            size: 30,
-                            color: KColors.background,
-                          ),
-                          Text("Change email",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: KColors.background))
-                        ],
-                      )),
-                    ),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProfileModifyPage(
+                                  type: Profile.Email,
+                                  userId: store.state.user_id,
+                                  icon: "assets/lottie/mail.json")));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: KColors.quint,
+                              borderRadius: BorderRadius.circular(10)),
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.width * 0.5 - 20,
+                          child: const Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.mail,
+                                size: 30,
+                                color: KColors.background,
+                              ),
+                              Text("Change email",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: KColors.background))
+                            ],
+                          )),
+                        )),
                   )
                 ],
               ),
@@ -166,30 +183,38 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: KColors.quint,
-                      ),
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      width: MediaQuery.of(context).size.width * 0.5 - 20,
-                      child: const Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.password,
-                            size: 30,
-                            color: KColors.background,
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProfileModifyPage(
+                                  type: Profile.Password,
+                                  userId: store.state.user_id,
+                                  icon: "assets/lottie/password.json")));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: KColors.quint,
                           ),
-                          Text("Change password",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: KColors.background))
-                        ],
-                      )),
-                    ),
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.width * 0.5 - 20,
+                          child: const Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.password,
+                                size: 30,
+                                color: KColors.background,
+                              ),
+                              Text("Change password",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: KColors.background))
+                            ],
+                          )),
+                        )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

@@ -28,6 +28,7 @@ class _BottomTabState extends State<BottomTab> {
     setState(() {});
   }
 
+  @override
   void initState() {
     super.initState();
     getUserData();
@@ -47,9 +48,9 @@ class _BottomTabState extends State<BottomTab> {
         setState(() {});
       }
       await fetchData(http.Client(), _userPos!.latitude, _userPos!.longitude)
-          .then((List<Data> resp) async {
-        List<Data> aux = resp;
-        for (Data charger in aux) {
+          .then((List<Charger> resp) async {
+        List<Charger> aux = resp;
+        for (Charger charger in aux) {
           var occupiedConnections = await totalOccupiedConnectors(charger);
           var totalConnections = 0;
           for (Connection connection in charger.Connections!) {
@@ -61,6 +62,7 @@ class _BottomTabState extends State<BottomTab> {
         store.dispatch(ChangeChargerPoints(aux));
       });
 
+      store.dispatch(ChangeUserId(userData["id"]));
       store.dispatch(ChangeStationIds(userData["charging_at"]["charger_id"],
           userData["charging_at"]["connection_id"]));
       store.dispatch(ChangeUserEmail(userData["email"]));
