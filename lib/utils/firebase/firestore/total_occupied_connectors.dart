@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:electric_park/utils/utils.dart';
 
-Future<int> totalOccupiedConnectors(Data charger) async {
+Future<int> totalOccupiedConnectors(Charger charger) async {
   try {
     Future<int> number =
         FirebaseFirestore.instance.collection("occupied_chargers").get().then(

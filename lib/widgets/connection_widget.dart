@@ -149,7 +149,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                             widget.connection.Quantity
                                         ? "Full"
                                         : "Charge",
-                                style: TextStyle(color: KColors.quatro)),
+                                style: const TextStyle(color: KColors.quatro)),
                           )
                         ],
                       ),

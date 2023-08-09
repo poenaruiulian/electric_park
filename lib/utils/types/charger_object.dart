@@ -1,4 +1,4 @@
-class Data {
+class Charger {
   final bool? IsRecentlyVerified;
   final String? DateLastVerified;
   final int? ID;
@@ -11,7 +11,7 @@ class Data {
   final List<Connection>? Connections;
   bool isOpen;
 
-  Data(
+  Charger(
       {required this.IsRecentlyVerified,
       required this.DateLastVerified,
       required this.ID,
@@ -24,8 +24,8 @@ class Data {
       required this.Connections,
       required this.isOpen});
 
-  factory Data.fromJson(Map<String, dynamic> parsedJson) {
-    return Data(
+  factory Charger.fromJson(Map<String, dynamic> parsedJson) {
+    return Charger(
         isOpen: true,
         ID: parsedJson["ID"] as int?,
         UsageCost: parsedJson["UsageCost"] as String?,

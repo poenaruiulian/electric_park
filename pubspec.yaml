@@ -79,6 +79,10 @@ flutter:
     - assets/icons/closed.png
     - assets/lottie/loading1.json
     - assets/lottie/loading2.json
+    - assets/lottie/mail.json
+    - assets/lottie/password.json
+    - assets/lottie/user_name.json
+
   
   fonts:
     - family: Aileron

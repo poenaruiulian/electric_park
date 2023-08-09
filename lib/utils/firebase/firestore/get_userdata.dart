@@ -8,8 +8,6 @@ Future getUser(String email) async {
         .get()
         .then(
       (querySnapshot) {
-        print("Successfully completed");
-        print(querySnapshot.docs[0].data());
         return querySnapshot.docs[0].data();
       },
       onError: (e) => print("Error completing: $e"),

@@ -5,9 +5,9 @@ import 'package:electric_park/constants/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChargerWidget extends StatefulWidget {
-  const ChargerWidget({Key? key, required this.charger});
+  const ChargerWidget({Key? key, required this.charger}) : super(key: key);
 
-  final Data charger;
+  final Charger charger;
 
   @override
   State<ChargerWidget> createState() => _ChargerWidgetState();
