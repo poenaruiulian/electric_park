@@ -1,5 +1,5 @@
 import 'package:electric_park/constants/constants.dart';
-import 'package:electric_park/widgets/widgets.dart';
+import 'package:electric_park/screens/charger_page.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +108,10 @@ class _HomePageState extends State<HomePage> {
                     markers.add(Marker(
                         icon: charger.isOpen ? openIcon : closedIcon,
                         onTap: () {
-                          onPressStation(context, charger);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChargerPage(
+                                    charger: charger,
+                                  )));
                         },
                         markerId: MarkerId("${charger.ID}"),
                         position: LatLng(charger.addressInfo.Latitude,
@@ -188,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                                                   .addressInfo
                                                   .Title,
                                           style: const TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color: KColors.background)),
                                       const SizedBox(width: 10),
@@ -259,16 +262,18 @@ class _HomePageState extends State<HomePage> {
                                                   .Longitude
                                               : store.state.chargers![indexOfNearest(store)].addressInfo.Longitude),
                                       14));
-                                  onPressStation(
-                                      context,
-                                      store.state.chargerId != ""
-                                          ? store.state.chargers![store
-                                              .state.chargers!
-                                              .indexWhere((element) =>
-                                                  element.ID.toString() ==
-                                                  store.state.chargerId)]
-                                          : store.state.chargers![
-                                              indexOfNearest(store)]);
+
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => ChargerPage(
+                                            charger: store.state.chargerId != ""
+                                                ? store.state.chargers![store
+                                                    .state.chargers!
+                                                    .indexWhere((element) =>
+                                                        element.ID.toString() ==
+                                                        store.state.chargerId)]
+                                                : store.state.chargers![
+                                                    indexOfNearest(store)],
+                                          )));
                                 },
                                 icon: const Icon(Icons.keyboard_arrow_right))
                           ],
