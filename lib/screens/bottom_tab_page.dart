@@ -19,7 +19,11 @@ class BottomTab extends StatefulWidget {
 class _BottomTabState extends State<BottomTab> {
   int _index = 0;
   final user = FirebaseAuth.instance.currentUser!;
-  final List<StatefulWidget> screens = [const HomePage(), const ProfilePage()];
+  final List<StatefulWidget> screens = [
+    const HomePage(),
+    const ProfilePage(),
+    const FavPage()
+  ];
   Position? _userPos;
   var userData;
 
@@ -96,8 +100,19 @@ class _BottomTabState extends State<BottomTab> {
                                   left: 25.0, right: 25.0),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
+                                  IconBottomBar(
+                                      text: "Favourites",
+                                      icon: Icons.star,
+                                      selected: _index == 2,
+                                      onPress: () {
+                                        if (!store.state.mapIsLoading!) {
+                                          setState(() {
+                                            _index = 2;
+                                          });
+                                        }
+                                      }),
                                   IconBottomBar(
                                       text: "Home",
                                       icon: Icons.map,
@@ -119,7 +134,7 @@ class _BottomTabState extends State<BottomTab> {
                                             _index = 1;
                                           });
                                         }
-                                      })
+                                      }),
                                 ],
                               ))))));
     });
@@ -144,18 +159,20 @@ class IconBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         IconButton(
             onPressed: onPress,
             icon: Icon(
               icon,
-              size: 25,
+              size: 30,
               color: selected ? KColors.tertiary : KColors.background,
             )),
         Text(text,
             style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 height: .1,
+                fontWeight: FontWeight.w500,
                 color: selected ? KColors.tertiary : KColors.background))
       ],
     );
