@@ -4,12 +4,8 @@ void addConnection(String email, String chargerId, String connectionid) async {
   try {
     FirebaseFirestore.instance.collection("occupied_chargers").get().then(
       (querySnapshot) {
-        print("Successfully completed");
-
         List updated = querySnapshot.docs[0].data()["chargers"];
         updated.add(connectionid);
-
-        print(updated);
 
         FirebaseFirestore.instance
             .collection('occupied_chargers')
@@ -29,7 +25,6 @@ void addConnection(String email, String chargerId, String connectionid) async {
         .get()
         .then(
       (querySnapshot) {
-        print("Successfully completed");
         var user = querySnapshot.docs[0].data();
 
         FirebaseFirestore.instance.collection('users').doc(user["id"]).update({

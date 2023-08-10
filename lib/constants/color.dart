@@ -9,4 +9,5 @@ class KColors {
   static const background = Color(0xFFf5f5f5);
   static const charge = Color(0xFFCECE5A);
   static const stop = Color(0xFFEF6262);
+  static const star = Color(0xFFFFE17B);
 }

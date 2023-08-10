@@ -8,7 +8,7 @@ import 'package:redux/redux.dart';
 import '../constants/constants.dart';
 
 class ChargerPage extends StatefulWidget {
-  const ChargerPage({Key? key, required this.charger});
+  const ChargerPage({Key? key, required this.charger}) : super(key: key);
 
   final Charger charger;
 
@@ -37,9 +37,6 @@ class _ChargerPageState extends State<ChargerPage> {
     super.initState();
     getOccupiedConnections();
     totalConnectors();
-
-    print(totalConnections);
-    print(occupiedConnections);
   }
 
   @override
@@ -65,26 +62,61 @@ class _ChargerPageState extends State<ChargerPage> {
                               ? KColors.charge
                               : KColors.quint,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Row(children: [
-                        SizedBox(
-                          width: (MediaQuery.of(context).size.width - 10) * 0.3,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back_ios,
-                                size: 32, color: KColors.background),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: (MediaQuery.of(context).size.width - 10) * 0.6,
-                          child: Text(widget.charger.addressInfo.Title,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: KColors.background,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ]),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: (MediaQuery.of(context).size.width - 10) *
+                                  0.15,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back_ios,
+                                    size: 32, color: KColors.background),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: (MediaQuery.of(context).size.width - 10) *
+                                  0.6,
+                              child: Text(widget.charger.addressInfo.Title,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      color: KColors.background,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            SizedBox(
+                              width: (MediaQuery.of(context).size.width - 10) *
+                                  0.15,
+                              child: IconButton(
+                                icon: Icon(
+                                    store.state.user_favs!.contains(
+                                            widget.charger.ID.toString())
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    size: 32,
+                                    color: KColors.star),
+                                onPressed: () {
+                                  if (store.state.user_favs!
+                                      .contains(widget.charger.ID.toString())) {
+                                    removeFav(store.state.user_email!,
+                                        widget.charger.ID.toString());
+                                    List aux = store.state.user_favs!;
+                                    aux.retainWhere((element) =>
+                                        element !=
+                                        widget.charger.ID.toString());
+                                    store.dispatch(ChangeFavs(aux));
+                                  } else {
+                                    addFav(store.state.user_email!,
+                                        widget.charger.ID.toString());
+                                    List aux = store.state.user_favs!;
+                                    aux.add(widget.charger.ID.toString());
+                                    store.dispatch(ChangeFavs(aux));
+                                  }
+                                },
+                              ),
+                            ),
+                          ]),
                     ),
                   ),
                   const SizedBox(height: 20),

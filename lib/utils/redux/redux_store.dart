@@ -14,6 +14,8 @@ class AppState {
 
   bool? mapIsLoading;
 
+  List? user_favs;
+
   AppState(
       {this.user_email,
       this.user_name,
@@ -22,7 +24,8 @@ class AppState {
       this.chargers,
       this.chargerId,
       this.connectionId,
-      this.mapIsLoading});
+      this.mapIsLoading,
+      this.user_favs});
 }
 
 class ChangePosition {
@@ -70,4 +73,9 @@ class ModifyMapIsLoading {
   bool? mapIsLoading;
 
   ModifyMapIsLoading(this.mapIsLoading);
+}
+
+class ChangeFavs {
+  List user_favs;
+  ChangeFavs(this.user_favs);
 }

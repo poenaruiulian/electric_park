@@ -10,7 +10,8 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: state.user_email,
         user_id: state.user_id,
         user_name: state.user_name,
-        mapIsLoading: state.mapIsLoading);
+        mapIsLoading: state.mapIsLoading,
+        user_favs: state.user_favs);
   }
   if (action is ChangeChargerPoints) {
     return AppState(
@@ -21,7 +22,8 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: state.user_email,
         user_name: state.user_name,
         user_id: state.user_id,
-        mapIsLoading: state.mapIsLoading);
+        mapIsLoading: state.mapIsLoading,
+        user_favs: state.user_favs);
   }
   if (action is ChangeStationIds) {
     return AppState(
@@ -32,7 +34,8 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: state.user_email,
         user_name: state.user_name,
         user_id: state.user_id,
-        mapIsLoading: state.mapIsLoading);
+        mapIsLoading: state.mapIsLoading,
+        user_favs: state.user_favs);
   }
   if (action is ChangeUserEmail) {
     return AppState(
@@ -43,7 +46,8 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: action.email,
         user_name: state.user_name,
         user_id: state.user_id,
-        mapIsLoading: state.mapIsLoading);
+        mapIsLoading: state.mapIsLoading,
+        user_favs: state.user_favs);
   }
   if (action is ChangeUserName) {
     return AppState(
@@ -54,7 +58,8 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: state.user_email,
         user_name: action.name,
         user_id: state.user_id,
-        mapIsLoading: state.mapIsLoading);
+        mapIsLoading: state.mapIsLoading,
+        user_favs: state.user_favs);
   }
 
   if (action is ModifyMapIsLoading) {
@@ -66,7 +71,8 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: state.user_email,
         user_name: state.user_name,
         user_id: state.user_id,
-        mapIsLoading: action.mapIsLoading);
+        mapIsLoading: action.mapIsLoading,
+        user_favs: state.user_favs);
   }
 
   if (action is ChangeUserId) {
@@ -78,7 +84,21 @@ AppState appReducer(AppState state, dynamic action) {
         user_email: state.user_email,
         user_name: state.user_name,
         user_id: action.id,
-        mapIsLoading: state.mapIsLoading);
+        mapIsLoading: state.mapIsLoading,
+        user_favs: state.user_favs);
+  }
+
+  if (action is ChangeFavs) {
+    return AppState(
+        user_position: state.user_position,
+        chargers: state.chargers,
+        chargerId: state.chargerId,
+        connectionId: state.connectionId,
+        user_email: state.user_email,
+        user_name: state.user_name,
+        user_id: state.user_id,
+        mapIsLoading: state.mapIsLoading,
+        user_favs: action.user_favs);
   }
 
   return state;
