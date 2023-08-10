@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void updateEmail(
     String? oldEmail, String newEmail, String password, String? id) async {
-  var user = await FirebaseAuth.instance.currentUser!;
-  var credentials = await EmailAuthProvider.credential(
+  var user = FirebaseAuth.instance.currentUser!;
+  var credentials = EmailAuthProvider.credential(
     email: oldEmail!,
     password: password,
   );

@@ -82,6 +82,8 @@ flutter:
     - assets/lottie/mail.json
     - assets/lottie/password.json
     - assets/lottie/user_name.json
+    - assets/lottie/not_found.json
+
 
   
   fonts:

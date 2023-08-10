@@ -67,6 +67,7 @@ class _BottomTabState extends State<BottomTab> {
       });
 
       store.dispatch(ChangeUserId(userData["id"]));
+      store.dispatch(ChangeFavs(userData["favs"]));
       store.dispatch(ChangeStationIds(userData["charging_at"]["charger_id"],
           userData["charging_at"]["connection_id"]));
       store.dispatch(ChangeUserEmail(userData["email"]));

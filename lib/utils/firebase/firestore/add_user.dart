@@ -7,13 +7,14 @@ Future<void> addNewUser(String email, String fullName) {
     "email": email,
     "full_name": fullName,
     "id": "",
-    "charging_at": {"charger_id": "", "connection_id": ""}
+    "charging_at": {"charger_id": "", "connection_id": ""},
+    "favs_chargers": []
     // ignore: invalid_return_type_for_catch_error
   }).then((value) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(value.id)
         .update({"id": value.id});
-  // ignore: invalid_return_type_for_catch_error
+    // ignore: invalid_return_type_for_catch_error
   }).catchError((error) => print("Failed to add user: $error"));
 }
