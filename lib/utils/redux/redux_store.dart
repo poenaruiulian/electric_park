@@ -1,5 +1,6 @@
 import 'package:electric_park/utils/types/charger_object.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AppState {
   Position? user_position;
@@ -15,6 +16,9 @@ class AppState {
   bool? mapIsLoading;
 
   List? user_favs;
+  List? occupied;
+
+  LatLng? end;
 
   AppState(
       {this.user_email,
@@ -25,7 +29,9 @@ class AppState {
       this.chargerId,
       this.connectionId,
       this.mapIsLoading,
-      this.user_favs});
+      this.user_favs,
+      this.occupied,
+      this.end});
 }
 
 class ChangePosition {
@@ -78,4 +84,14 @@ class ModifyMapIsLoading {
 class ChangeFavs {
   List user_favs;
   ChangeFavs(this.user_favs);
+}
+
+class ChangeOccupied {
+  List occupied;
+  ChangeOccupied(this.occupied);
+}
+
+class ChangeEnd {
+  LatLng end;
+  ChangeEnd(this.end);
 }

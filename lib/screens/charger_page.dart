@@ -3,14 +3,17 @@ import 'package:electric_park/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:redux/redux.dart';
 
 import '../constants/constants.dart';
 
 class ChargerPage extends StatefulWidget {
-  const ChargerPage({Key? key, required this.charger}) : super(key: key);
+  const ChargerPage(
+      {Key? key, required this.charger, required this.getPolyline});
 
   final Charger charger;
+  final Function() getPolyline;
 
   @override
   State<ChargerPage> createState() => _ChargerPageState();
@@ -37,6 +40,8 @@ class _ChargerPageState extends State<ChargerPage> {
     super.initState();
     getOccupiedConnections();
     totalConnectors();
+
+    print("++ $totalConnections $occupiedConnections");
   }
 
   @override
@@ -62,63 +67,39 @@ class _ChargerPageState extends State<ChargerPage> {
                               ? KColors.charge
                               : KColors.quint,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width - 10) *
-                                  0.15,
-                              child: IconButton(
-                                icon: const Icon(Icons.arrow_back_ios,
-                                    size: 32, color: KColors.background),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width - 10) *
-                                  0.6,
-                              child: Text(widget.charger.addressInfo.Title,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      color: KColors.background,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width - 10) *
-                                  0.15,
-                              child: IconButton(
-                                icon: Icon(
-                                    store.state.user_favs!.contains(
-                                            widget.charger.ID.toString())
-                                        ? Icons.star
-                                        : Icons.star_border,
-                                    size: 32,
-                                    color: KColors.star),
-                                onPressed: () {
-                                  if (store.state.user_favs!
-                                      .contains(widget.charger.ID.toString())) {
-                                    removeFav(store.state.user_email!,
-                                        widget.charger.ID.toString());
-                                    List aux = store.state.user_favs!;
-                                    aux.retainWhere((element) =>
-                                        element !=
-                                        widget.charger.ID.toString());
-                                    store.dispatch(ChangeFavs(aux));
-                                  } else {
-                                    addFav(store.state.user_email!,
-                                        widget.charger.ID.toString());
-                                    List aux = store.state.user_favs!;
-                                    aux.add(widget.charger.ID.toString());
-                                    store.dispatch(ChangeFavs(aux));
-                                  }
-                                },
-                              ),
-                            ),
-                          ]),
+                      child: Row(children: [
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width - 10) * 0.3,
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back_ios,
+                                size: 32, color: KColors.background),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width - 10) * 0.6,
+                          child: Text(widget.charger.addressInfo.Title,
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  color: KColors.background,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ]),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                      onPressed: () {
+                        store.dispatch(ChangeEnd(LatLng(
+                            widget.charger.addressInfo.Latitude,
+                            widget.charger.addressInfo.Longitude)));
+                        if (store.state.chargerId != null) {
+                          widget.getPolyline();
+                        }
+                      },
+                      child: const Text("Navigate")),
                   const SizedBox(height: 20),
                   Container(
                     alignment: Alignment.bottomLeft,

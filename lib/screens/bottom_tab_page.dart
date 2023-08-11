@@ -53,17 +53,20 @@ class _BottomTabState extends State<BottomTab> {
       }
       await fetchData(http.Client(), _userPos!.latitude, _userPos!.longitude)
           .then((List<Charger> resp) async {
-        List<Charger> aux = resp;
-        for (Charger charger in aux) {
+        List aux = [];
+        for (Charger charger in resp) {
           var occupiedConnections = await totalOccupiedConnectors(charger);
           var totalConnections = 0;
           for (Connection connection in charger.Connections!) {
             totalConnections += connection.Quantity ?? 0;
           }
-          aux[aux.indexOf(charger)].isOpen =
-              (totalConnections == occupiedConnections) ? false : true;
+
+          if (occupiedConnections == totalConnections) {
+            aux.add(charger.ID.toString());
+          }
         }
-        store.dispatch(ChangeChargerPoints(aux));
+        store.dispatch(ChangeOccupied(aux));
+        store.dispatch(ChangeChargerPoints(resp));
       });
 
       store.dispatch(ChangeUserId(userData["id"]));
@@ -78,7 +81,8 @@ class _BottomTabState extends State<BottomTab> {
               store.state.user_position == null ||
               store.state.chargers == null ||
               store.state.chargerId == null ||
-              store.state.connectionId == null
+              store.state.connectionId == null ||
+              store.state.occupied == null
           ? Scaffold(
               backgroundColor: KColors.quatro,
               body: Center(

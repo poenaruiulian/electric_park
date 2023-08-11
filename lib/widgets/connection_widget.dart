@@ -124,6 +124,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                 setState(() {
                                   occupiedConect -= 1;
                                 });
+                                modifyStoreOccupied(store, widget.chargerId);
                               } else if (store.state.chargerId == "" &&
                                   occupiedConect !=
                                       widget.connection.Quantity) {
@@ -137,6 +138,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
                                 setState(() {
                                   occupiedConect += 1;
                                 });
+                                modifyStoreOccupied(store, widget.chargerId);
                               } else {
                                 print("Helllo world here!");
                               }

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:electric_park/utils/utils.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
+import 'package:google_map_polyline_new/google_map_polyline_new.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:redux/redux.dart';
 
@@ -27,8 +27,42 @@ class _HomePageState extends State<HomePage> {
   BitmapDescriptor closedIcon = BitmapDescriptor.defaultMarker;
   bool cameraMoved = false;
 
+  int _polylineCount = 1;
+  Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
+
+  GoogleMapPolyline _googleMapPolyline =
+      GoogleMapPolyline(apiKey: "AIzaSyDY7wD-gz-VdazpQiQCfwdhkmZuydiMFRU");
+
   List<Marker> markers = [];
   late GoogleMapController mapController;
+
+  _getPolylinesWithLocation(LatLng start, LatLng end) async {
+    List<LatLng>? _coordinates =
+        await _googleMapPolyline.getCoordinatesWithLocation(
+            origin: start, destination: end, mode: RouteMode.driving);
+
+    setState(() {
+      _polylines.clear();
+    });
+    _addPolyline(_coordinates);
+  }
+
+  _addPolyline(List<LatLng>? _coordinates) {
+    PolylineId id = PolylineId("poly$_polylineCount");
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: Colors.blueAccent,
+        points: _coordinates!,
+        width: 10,
+        onTap: () {
+          print("Navigate");
+        });
+
+    setState(() {
+      _polylines[id] = polyline;
+      _polylineCount++;
+    });
+  }
 
   @override
   initState() {
@@ -72,7 +106,7 @@ class _HomePageState extends State<HomePage> {
   int indexOfNearest(Store<AppState> store) {
     int nearestOpen = 0;
     for (var charger in store.state.chargers!) {
-      if (charger.isOpen) {
+      if (store.state.occupied!.contains(charger.ID.toString())) {
         nearestOpen = store.state.chargers!.indexOf(charger);
         break;
       }
@@ -106,12 +140,28 @@ class _HomePageState extends State<HomePage> {
                   });
                   for (Charger charger in store.state.chargers!) {
                     markers.add(Marker(
-                        icon: charger.isOpen ? openIcon : closedIcon,
+                        icon: store.state.occupied!
+                                .contains(charger.ID.toString())
+                            ? closedIcon
+                            : openIcon,
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChargerPage(
+                          if (store.state.occupied!
+                              .contains(charger.ID.toString())) {
+                            print("hello");
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ChargerPage(
                                     charger: charger,
-                                  )));
+                                    getPolyline: () {
+                                      _getPolylinesWithLocation(
+                                          LatLng(
+                                              store.state.user_position!
+                                                  .latitude,
+                                              store.state.user_position!
+                                                  .longitude),
+                                          store.state.end!);
+                                    })));
+                          }
                         },
                         markerId: MarkerId("${charger.ID}"),
                         position: LatLng(charger.addressInfo.Latitude,
@@ -120,6 +170,7 @@ class _HomePageState extends State<HomePage> {
                   store.dispatch(ModifyMapIsLoading(false));
                 },
                 markers: Set<Marker>.of(markers),
+                polylines: Set<Polyline>.of(_polylines.values),
                 myLocationButtonEnabled: false,
                 initialCameraPosition: CameraPosition(
                     target: LatLng(store.state.user_position!.latitude,
@@ -265,15 +316,32 @@ class _HomePageState extends State<HomePage> {
 
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ChargerPage(
-                                            charger: store.state.chargerId != ""
-                                                ? store.state.chargers![store
-                                                    .state.chargers!
-                                                    .indexWhere((element) =>
-                                                        element.ID.toString() ==
-                                                        store.state.chargerId)]
-                                                : store.state.chargers![
-                                                    indexOfNearest(store)],
-                                          )));
+                                          charger: store.state.chargerId != ""
+                                              ? store.state.chargers![store
+                                                  .state.chargers!
+                                                  .indexWhere((element) =>
+                                                      element.ID.toString() ==
+                                                      store.state.chargerId)]
+                                              : store.state.chargers![
+                                                  indexOfNearest(store)],
+                                          getPolyline: () {
+                                            _getPolylinesWithLocation(
+                                                LatLng(
+                                                    store.state.user_position!
+                                                        .latitude,
+                                                    store.state.user_position!
+                                                        .longitude),
+                                                store.state.end ??
+                                                    LatLng(
+                                                        store
+                                                            .state
+                                                            .user_position!
+                                                            .latitude,
+                                                        store
+                                                            .state
+                                                            .user_position!
+                                                            .longitude));
+                                          })));
                                 },
                                 icon: const Icon(Icons.keyboard_arrow_right))
                           ],
