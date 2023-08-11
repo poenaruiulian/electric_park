@@ -7,6 +7,7 @@ import 'package:electric_park/utils/utils.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_map_polyline_new/google_map_polyline_new.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:redux/redux.dart';
 
 // 45,76  21,22 Iulius Town
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
 
   GoogleMapPolyline _googleMapPolyline =
-      GoogleMapPolyline(apiKey: "AIzaSyDY7wD-gz-VdazpQiQCfwdhkmZuydiMFRU");
+      GoogleMapPolyline(apiKey: "AIzaSyAXxM3RHLRFmdtXkrZbvYLa5xhfPcK06HU");
 
   List<Marker> markers = [];
   late GoogleMapController mapController;
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
       _polylines.clear();
     });
     _addPolyline(_coordinates);
+    Navigator.of(context).pop();
   }
 
   _addPolyline(List<LatLng>? _coordinates) {
@@ -53,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         polylineId: id,
         color: Colors.blueAccent,
         points: _coordinates!,
-        width: 10,
+        width: 5,
         onTap: () {
           print("Navigate");
         });
@@ -116,7 +118,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreBuilder(builder: (context, Store<AppState> store) {
+    return StoreBuilder(onInit: (Store<AppState> store) {
+      if (_polylines.isEmpty) {
+        store.dispatch(ChangeEnd(
+            LatLng(store.state.user_position!.latitude,
+                store.state.user_position!.longitude),
+            false));
+      }
+    }, builder: (context, Store<AppState> store) {
       return Scaffold(
         backgroundColor: KColors.quatro,
         body: SizedBox(
@@ -131,7 +140,10 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     markers.add(Marker(
                         onTap: () {
-                          print("Hello");
+                          CameraUpdate.newLatLngZoom(
+                              LatLng(store.state.user_position!.latitude,
+                                  store.state.user_position!.longitude),
+                              16);
                         },
                         icon: userIcon,
                         markerId: const MarkerId("userPosition"),
@@ -153,6 +165,15 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => ChargerPage(
                                     charger: charger,
                                     getPolyline: () {
+                                      mapController.animateCamera(
+                                          CameraUpdate.newLatLngZoom(
+                                              LatLng(
+                                                  store.state.user_position!
+                                                      .latitude,
+                                                  store.state.user_position!
+                                                      .longitude),
+                                              16));
+
                                       _getPolylinesWithLocation(
                                           LatLng(
                                               store.state.user_position!
@@ -288,31 +309,31 @@ class _HomePageState extends State<HomePage> {
                                 iconSize: 40,
                                 color: KColors.primary,
                                 onPressed: () {
-                                  mapController.animateCamera(CameraUpdate.newLatLngZoom(
-                                      LatLng(
-                                          store.state.chargerId != ""
-                                              ? store
-                                                  .state
-                                                  .chargers![store.state.chargers!.indexWhere((element) =>
-                                                      element.ID.toString() ==
-                                                      store.state.chargerId)]
-                                                  .addressInfo
-                                                  .Latitude
-                                              : store
-                                                  .state
-                                                  .chargers![
-                                                      indexOfNearest(store)]
-                                                  .addressInfo
-                                                  .Latitude,
-                                          store.state.chargerId != ""
-                                              ? store
-                                                  .state
-                                                  .chargers![store.state.chargers!
-                                                      .indexWhere((element) => element.ID.toString() == store.state.chargerId)]
-                                                  .addressInfo
-                                                  .Longitude
-                                              : store.state.chargers![indexOfNearest(store)].addressInfo.Longitude),
-                                      14));
+                                  // mapController.animateCamera(CameraUpdate.newLatLngZoom(
+                                  //     LatLng(
+                                  //         store.state.chargerId != ""
+                                  //             ? store
+                                  //                 .state
+                                  //                 .chargers![store.state.chargers!.indexWhere((element) =>
+                                  //                     element.ID.toString() ==
+                                  //                     store.state.chargerId)]
+                                  //                 .addressInfo
+                                  //                 .Latitude
+                                  //             : store
+                                  //                 .state
+                                  //                 .chargers![
+                                  //                     indexOfNearest(store)]
+                                  //                 .addressInfo
+                                  //                 .Latitude,
+                                  //         store.state.chargerId != ""
+                                  //             ? store
+                                  //                 .state
+                                  //                 .chargers![store.state.chargers!
+                                  //                     .indexWhere((element) => element.ID.toString() == store.state.chargerId)]
+                                  //                 .addressInfo
+                                  //                 .Longitude
+                                  //             : store.state.chargers![indexOfNearest(store)].addressInfo.Longitude),
+                                  //     14));
 
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ChargerPage(
@@ -325,13 +346,8 @@ class _HomePageState extends State<HomePage> {
                                               : store.state.chargers![
                                                   indexOfNearest(store)],
                                           getPolyline: () {
-                                            _getPolylinesWithLocation(
-                                                LatLng(
-                                                    store.state.user_position!
-                                                        .latitude,
-                                                    store.state.user_position!
-                                                        .longitude),
-                                                store.state.end ??
+                                            mapController.animateCamera(
+                                                CameraUpdate.newLatLngZoom(
                                                     LatLng(
                                                         store
                                                             .state
@@ -340,7 +356,21 @@ class _HomePageState extends State<HomePage> {
                                                         store
                                                             .state
                                                             .user_position!
-                                                            .longitude));
+                                                            .longitude),
+                                                    16));
+                                            _getPolylinesWithLocation(
+                                                LatLng(
+                                                    store.state.user_position!
+                                                        .latitude,
+                                                    store.state.user_position!
+                                                        .longitude),
+                                                store.state.end ??
+                                                    LatLng(
+                                                      store.state.user_position!
+                                                          .latitude,
+                                                      store.state.user_position!
+                                                          .longitude,
+                                                    ));
                                           })));
                                 },
                                 icon: const Icon(Icons.keyboard_arrow_right))
@@ -349,27 +379,96 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 10),
                       Container(
-                        child: cameraMoved
-                            ? ElevatedButton(
-                                onPressed: () {
-                                  mapController.animateCamera(
-                                      CameraUpdate.newLatLngZoom(
-                                          LatLng(
-                                              store.state.user_position!
-                                                  .latitude,
-                                              store.state.user_position!
-                                                  .longitude),
-                                          14));
-                                  setState(() {
-                                    cameraMoved = false;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: KColors.tertiary),
-                                child: const Text("Recenter",
-                                    style:
-                                        TextStyle(color: KColors.background)))
-                            : const Text(""),
+                        child: store.state.roadShow!
+                            ? Container(
+                                child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            MapsLauncher.launchCoordinates(
+                                                store.state.end!.latitude,
+                                                store.state.end!.longitude);
+                                          },
+                                          child: Container(
+                                              height: 40,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3,
+                                              decoration: BoxDecoration(
+                                                  color: KColors.tertiary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: const Center(
+                                                child: Text("Navigate",
+                                                    style: TextStyle(
+                                                        color:
+                                                            KColors.background,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ))),
+                                      GestureDetector(
+                                        onTap: () {
+                                          store
+                                              .dispatch(ChangeEnd(null, false));
+                                          _polylines.clear();
+                                          setState(() {});
+                                          mapController.animateCamera(
+                                              CameraUpdate.newLatLngZoom(
+                                                  LatLng(
+                                                      store.state.user_position!
+                                                          .latitude,
+                                                      store.state.user_position!
+                                                          .longitude),
+                                                  14));
+                                        },
+                                        child: Container(
+                                            height: 40,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.3,
+                                            decoration: BoxDecoration(
+                                                color: KColors.tertiary,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: const Center(
+                                              child: Text("Close",
+                                                  style: TextStyle(
+                                                      color: KColors.background,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                            )),
+                                      )
+                                    ]),
+                              )
+                            : cameraMoved
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      mapController.animateCamera(
+                                          CameraUpdate.newLatLngZoom(
+                                              LatLng(
+                                                  store.state.user_position!
+                                                      .latitude,
+                                                  store.state.user_position!
+                                                      .longitude),
+                                              14));
+                                      setState(() {
+                                        cameraMoved = false;
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: KColors.tertiary),
+                                    child: const Text("Recenter",
+                                        style: TextStyle(
+                                            color: KColors.background)))
+                                : const Text(""),
                       )
                     ],
                   ),

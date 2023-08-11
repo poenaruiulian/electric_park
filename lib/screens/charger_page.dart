@@ -125,16 +125,31 @@ class _ChargerPageState extends State<ChargerPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                      onPressed: () {
-                        store.dispatch(ChangeEnd(LatLng(
-                            widget.charger.addressInfo.Latitude,
-                            widget.charger.addressInfo.Longitude)));
-                        if (store.state.chargerId != null) {
-                          widget.getPolyline();
-                        }
-                      },
-                      child: const Text("Navigate")),
+                  GestureDetector(
+                    onTap: () {
+                      store.dispatch(ChangeEnd(
+                          LatLng(widget.charger.addressInfo.Latitude,
+                              widget.charger.addressInfo.Longitude),
+                          true));
+                      if (store.state.chargerId != null) {
+                        widget.getPolyline();
+                      }
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          color: KColors.tertiary,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const Center(
+                        child: Text("Show the route",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: KColors.background)),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Container(
                     alignment: Alignment.bottomLeft,

@@ -19,6 +19,7 @@ class AppState {
   List? occupied;
 
   LatLng? end;
+  bool? roadShow = false;
 
   AppState(
       {this.user_email,
@@ -31,7 +32,8 @@ class AppState {
       this.mapIsLoading,
       this.user_favs,
       this.occupied,
-      this.end});
+      this.end,
+      this.roadShow});
 }
 
 class ChangePosition {
@@ -92,6 +94,7 @@ class ChangeOccupied {
 }
 
 class ChangeEnd {
-  LatLng end;
-  ChangeEnd(this.end);
+  LatLng? end;
+  bool roadShow;
+  ChangeEnd(this.end, this.roadShow);
 }

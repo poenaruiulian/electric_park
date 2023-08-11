@@ -49,7 +49,12 @@ class _FavChargerWidgetState extends State<FavChargerWidget> {
                     builder: (context) => ChargerPage(
                           charger: widget.charger,
                           getPolyline: () {
-                            print("hello");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    "Can't navigate form favourites page, yet..."),
+                              ),
+                            );
                           },
                         )));
               },
@@ -79,8 +84,8 @@ class _FavChargerWidgetState extends State<FavChargerWidget> {
                                       child: Text(
                                           widget.charger.addressInfo.Title,
                                           style: const TextStyle(
-                                              color: KColors.quatro,
-                                              fontSize: 16,
+                                              color: KColors.background,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.bold)),
                                     )),
                                 SizedBox(
@@ -91,8 +96,8 @@ class _FavChargerWidgetState extends State<FavChargerWidget> {
                                     child: Text(
                                         "${(widget.charger.addressInfo.Distance! * 10).toStringAsFixed(1)} km",
                                         style: const TextStyle(
-                                            color: KColors.quatro,
-                                            fontSize: 16,
+                                            color: KColors.tertiary,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.bold)),
                                   ),
                                 )
