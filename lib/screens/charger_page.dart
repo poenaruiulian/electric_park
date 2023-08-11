@@ -94,7 +94,7 @@ class _ChargerPageState extends State<ChargerPage> {
                                             widget.charger.ID.toString())
                                         ? Icons.star
                                         : Icons.star_border,
-                                    size: 32,
+                                    size: 36,
                                     color: KColors.star),
                                 onPressed: () {
                                   if (store.state.user_favs!
