@@ -47,6 +47,7 @@ dependencies:
   lottie: any
   flutter_svg: ^2.0.7
   google_fonts: ^5.1.0
+  google_map_polyline_new: ^0.3.0+2
 
 
 dev_dependencies:

@@ -5,8 +5,7 @@ Future<int> occupiedConnectors(String connectionid) async {
     Future<int> number =
         FirebaseFirestore.instance.collection("occupied_chargers").get().then(
       (querySnapshot) {
-        print("Successfully completed");
-
+        
         List connections = querySnapshot.docs[0].data()["chargers"];
 
         int aux = 0;

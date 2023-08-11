@@ -3,14 +3,17 @@ import 'package:electric_park/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:redux/redux.dart';
 
 import '../constants/constants.dart';
 
 class ChargerPage extends StatefulWidget {
-  const ChargerPage({Key? key, required this.charger}) : super(key: key);
+  const ChargerPage(
+      {Key? key, required this.charger, required this.getPolyline});
 
   final Charger charger;
+  final Function() getPolyline;
 
   @override
   State<ChargerPage> createState() => _ChargerPageState();
@@ -37,6 +40,8 @@ class _ChargerPageState extends State<ChargerPage> {
     super.initState();
     getOccupiedConnections();
     totalConnectors();
+
+    print("++ $totalConnections $occupiedConnections");
   }
 
   @override
@@ -119,6 +124,17 @@ class _ChargerPageState extends State<ChargerPage> {
                           ]),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                      onPressed: () {
+                        store.dispatch(ChangeEnd(LatLng(
+                            widget.charger.addressInfo.Latitude,
+                            widget.charger.addressInfo.Longitude)));
+                        if (store.state.chargerId != null) {
+                          widget.getPolyline();
+                        }
+                      },
+                      child: const Text("Navigate")),
                   const SizedBox(height: 20),
                   Container(
                     alignment: Alignment.bottomLeft,

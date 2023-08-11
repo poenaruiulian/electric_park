@@ -46,8 +46,12 @@ class _FavChargerWidgetState extends State<FavChargerWidget> {
           child: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ChargerPage(charger: widget.charger)));
+                    builder: (context) => ChargerPage(
+                          charger: widget.charger,
+                          getPolyline: () {
+                            print("hello");
+                          },
+                        )));
               },
               child: Container(
                 width: MediaQuery.of(context).size.width - 10,

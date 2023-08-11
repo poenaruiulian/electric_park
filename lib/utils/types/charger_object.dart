@@ -9,7 +9,7 @@ class Charger {
   final String? UsageCost;
   final AddressInfo addressInfo;
   final List<Connection>? Connections;
-  bool isOpen;
+
 
   Charger(
       {required this.IsRecentlyVerified,
@@ -21,12 +21,10 @@ class Charger {
       required this.UsageTypeID,
       required this.UsageCost,
       required this.addressInfo,
-      required this.Connections,
-      required this.isOpen});
+      required this.Connections,});
 
   factory Charger.fromJson(Map<String, dynamic> parsedJson) {
     return Charger(
-        isOpen: true,
         ID: parsedJson["ID"] as int?,
         UsageCost: parsedJson["UsageCost"] as String?,
         IsRecentlyVerified: parsedJson["IsRecentlyVerified"] as bool?,
