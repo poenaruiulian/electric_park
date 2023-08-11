@@ -13,7 +13,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
   if (action is ChangeChargerPoints) {
     return AppState(
@@ -27,7 +28,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
   if (action is ChangeStationIds) {
     return AppState(
@@ -41,7 +43,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
   if (action is ChangeUserEmail) {
     return AppState(
@@ -55,7 +58,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
   if (action is ChangeUserName) {
     return AppState(
@@ -69,7 +73,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
 
   if (action is ModifyMapIsLoading) {
@@ -84,7 +89,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: action.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
 
   if (action is ChangeUserId) {
@@ -99,7 +105,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
 
   if (action is ChangeFavs) {
@@ -114,7 +121,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: action.user_favs,
         occupied: state.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
 
   if (action is ChangeOccupied) {
@@ -129,7 +137,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: action.occupied,
-        end: state.end);
+        end: state.end,
+        roadShow: state.roadShow);
   }
 
   if (action is ChangeEnd) {
@@ -144,7 +153,8 @@ AppState appReducer(AppState state, dynamic action) {
         mapIsLoading: state.mapIsLoading,
         user_favs: state.user_favs,
         occupied: state.occupied,
-        end: action.end);
+        end: action.end,
+        roadShow: action.roadShow);
   }
 
   return state;
