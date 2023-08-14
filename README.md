@@ -88,7 +88,7 @@ Below, you can see a *not slow at all* video that shows the entire app working (
 - Flutter
 - Firebase for the Auth, Firestore and Firestorage
 - GoogleMaps API for the map
-- Open Charge Map API for the information of chargers
+- [Open Charge Map API for the information of chargers](https://openchargemap.org/site/develop/api#/)
 
 ## Problems faced/facing and next directions
 
