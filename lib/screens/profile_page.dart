@@ -30,15 +30,48 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: KColors.quint,
                       borderRadius: BorderRadius.circular(10)),
                   width: MediaQuery.of(context).size.width - 10,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.account_circle,
-                          size: 72,
-                          color: KColors.quatro,
-                        ),
+                        Stack(
+                            alignment: AlignmentDirectional.bottomCenter,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Container(
+                                  color: KColors.quatro,
+                                  child: store.state.user_profile_pic == ""
+                                      ? const Icon(
+                                          Icons.account_circle,
+                                          size: 120,
+                                          color: Color.fromARGB(
+                                              173, 245, 245, 245),
+                                        )
+                                      : Image(
+                                          image: NetworkImage(
+                                              store.state.user_profile_pic!),
+                                          height: 120,
+                                          width: 120),
+                                ),
+                              ),
+                              Container(
+                                width: 120,
+                                decoration: const BoxDecoration(
+                                    color: Color.fromARGB(199, 37, 39, 77),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(60),
+                                        bottomRight: Radius.circular(60))),
+                                child: IconButton(
+                                    onPressed: () {
+                                      pickImage(store);
+                                    },
+                                    icon: const Icon(
+                                      Icons.border_color,
+                                      color: Color.fromARGB(199, 245, 245, 245),
+                                    )),
+                              )
+                            ]),
                         const Text("Welcome ",
                             style: TextStyle(
                                 fontSize: 36,
@@ -136,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Text("Edit name",
                                   style: TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                       color: KColors.background))
                             ],
                           )),

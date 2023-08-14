@@ -10,7 +10,8 @@ import '../constants/constants.dart';
 
 class ChargerPage extends StatefulWidget {
   const ChargerPage(
-      {Key? key, required this.charger, required this.getPolyline});
+      {Key? key, required this.charger, required this.getPolyline})
+      : super(key: key);
 
   final Charger charger;
   final Function() getPolyline;
