@@ -29,32 +29,32 @@ class _HomePageState extends State<HomePage> {
   bool cameraMoved = false;
 
   int _polylineCount = 1;
-  Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
+  final Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
 
-  GoogleMapPolyline _googleMapPolyline =
+  final GoogleMapPolyline _googleMapPolyline =
       GoogleMapPolyline(apiKey: "AIzaSyAXxM3RHLRFmdtXkrZbvYLa5xhfPcK06HU");
 
   List<Marker> markers = [];
   late GoogleMapController mapController;
 
   _getPolylinesWithLocation(LatLng start, LatLng end) async {
-    List<LatLng>? _coordinates =
+    List<LatLng>? coordinates =
         await _googleMapPolyline.getCoordinatesWithLocation(
             origin: start, destination: end, mode: RouteMode.driving);
 
     setState(() {
       _polylines.clear();
     });
-    _addPolyline(_coordinates);
+    _addPolyline(coordinates);
     Navigator.of(context).pop();
   }
 
-  _addPolyline(List<LatLng>? _coordinates) {
+  _addPolyline(List<LatLng>? coordinates) {
     PolylineId id = PolylineId("poly$_polylineCount");
     Polyline polyline = Polyline(
         polylineId: id,
         color: Colors.blueAccent,
-        points: _coordinates!,
+        points: coordinates!,
         width: 5,
         onTap: () {
           print("Navigate");
@@ -157,32 +157,26 @@ class _HomePageState extends State<HomePage> {
                             ? closedIcon
                             : openIcon,
                         onTap: () {
-                          if (store.state.occupied!
-                              .contains(charger.ID.toString())) {
-                            print("hello");
-                          } else {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ChargerPage(
-                                    charger: charger,
-                                    getPolyline: () {
-                                      mapController.animateCamera(
-                                          CameraUpdate.newLatLngZoom(
-                                              LatLng(
-                                                  store.state.user_position!
-                                                      .latitude,
-                                                  store.state.user_position!
-                                                      .longitude),
-                                              16));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChargerPage(
+                                  charger: charger,
+                                  getPolyline: () {
+                                    mapController.animateCamera(
+                                        CameraUpdate.newLatLngZoom(
+                                            LatLng(
+                                                store.state.user_position!
+                                                    .latitude,
+                                                store.state.user_position!
+                                                    .longitude),
+                                            16));
 
-                                      _getPolylinesWithLocation(
-                                          LatLng(
-                                              store.state.user_position!
-                                                  .latitude,
-                                              store.state.user_position!
-                                                  .longitude),
-                                          store.state.end!);
-                                    })));
-                          }
+                                    _getPolylinesWithLocation(
+                                        LatLng(
+                                            store.state.user_position!.latitude,
+                                            store.state.user_position!
+                                                .longitude),
+                                        store.state.end!);
+                                  })));
                         },
                         markerId: MarkerId("${charger.ID}"),
                         position: LatLng(charger.addressInfo.Latitude,

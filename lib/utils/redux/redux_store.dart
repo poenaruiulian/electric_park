@@ -12,6 +12,7 @@ class AppState {
   String? user_email;
   String? user_name;
   String? user_id;
+  String? user_profile_pic;
 
   bool? mapIsLoading;
 
@@ -33,7 +34,8 @@ class AppState {
       this.user_favs,
       this.occupied,
       this.end,
-      this.roadShow});
+      this.roadShow,
+      this.user_profile_pic});
 }
 
 class ChangePosition {
@@ -97,4 +99,10 @@ class ChangeEnd {
   LatLng? end;
   bool roadShow;
   ChangeEnd(this.end, this.roadShow);
+}
+
+class ChangeProfilePic {
+  String? user_profile_pic;
+
+  ChangeProfilePic(this.user_profile_pic);
 }

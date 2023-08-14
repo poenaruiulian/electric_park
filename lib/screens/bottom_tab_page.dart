@@ -68,7 +68,7 @@ class _BottomTabState extends State<BottomTab> {
         store.dispatch(ChangeOccupied(aux));
         store.dispatch(ChangeChargerPoints(resp));
       });
-
+      store.dispatch(ChangeProfilePic(userData["profile_pic_link"]));
       store.dispatch(ChangeUserId(userData["id"]));
       store.dispatch(ChangeFavs(userData["favs"]));
       store.dispatch(ChangeStationIds(userData["charging_at"]["charger_id"],
@@ -82,7 +82,8 @@ class _BottomTabState extends State<BottomTab> {
               store.state.chargers == null ||
               store.state.chargerId == null ||
               store.state.connectionId == null ||
-              store.state.occupied == null
+              store.state.occupied == null ||
+              store.state.user_profile_pic == null
           ? Scaffold(
               backgroundColor: KColors.quatro,
               body: Center(

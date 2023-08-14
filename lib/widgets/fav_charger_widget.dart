@@ -1,6 +1,5 @@
 import 'package:electric_park/constants/constants.dart';
 import 'package:electric_park/screens/charger_page.dart';
-import 'package:electric_park/utils/types/charger_object.dart';
 import 'package:electric_park/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';

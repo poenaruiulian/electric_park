@@ -11,9 +11,11 @@ export 'firebase/firestore/update_email.dart';
 export 'firebase/firestore/update_password.dart';
 export 'firebase/firestore/add_to_favs.dart';
 export 'firebase/firestore/remove_fav.dart';
+export 'firebase/firestore/update_profile_picture.dart';
 
 export 'handle_location_permission.dart';
 export "modify_store_occupied.dart";
+export 'pic_image.dart';
 
 export 'redux/redux_reduce.dart';
 export 'redux/redux_store.dart';
