@@ -89,8 +89,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                   )),
               const SizedBox(height: 60),
               ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: KColors.secondary),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: KColors.quatro),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       login(emailController.text.trim(),

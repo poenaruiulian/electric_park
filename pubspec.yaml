@@ -43,6 +43,14 @@ dependencies:
   redux: any
   google_maps_flutter: ^2.4.0
   google_maps_flutter_web: ^0.5.3
+  http: ^1.1.0
+  lottie: any
+  flutter_svg: ^2.0.7
+  google_fonts: ^5.1.0
+  google_map_polyline_new: ^0.3.0+2
+  maps_launcher: ^2.2.0
+  image_picker: ^0.8.3
+  firebase_storage: ^11.2.5
 
 
 dev_dependencies:
@@ -71,6 +79,24 @@ flutter:
   assets:
     - assets/map_style.json
     - assets/icons/user.png
+    - assets/icons/open.png
+    - assets/icons/closed.png
+    - assets/lottie/loading1.json
+    - assets/lottie/loading2.json
+    - assets/lottie/mail.json
+    - assets/lottie/password.json
+    - assets/lottie/user_name.json
+    - assets/lottie/not_found.json
+
+
+  
+  fonts:
+    - family: Aileron
+      fonts:
+        - asset: fonts/Aileron-Black.otf
+    - family : NotoSans
+      fonts:
+        - asset: fonts/NotoSans-Black.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
